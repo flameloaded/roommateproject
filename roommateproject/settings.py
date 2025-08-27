@@ -38,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'Userapp',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'listings',
+    'messaging',
+    'reviews',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +56,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'roommateproject.urls'
+
+
+AUTHENTICATION_BACKENDS = [
+    'Userapp.backends.EmailBackend',  # custom backend
+    'django.contrib.auth.backends.ModelBackend',  # default
+]
 
 TEMPLATES = [
     {
@@ -128,3 +139,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 AUTH_USER_MODEL = 'Userapp.CustomUser'
+
+
+from datetime import timedelta
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),  # token lasts for 30 days
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=60), # refresh token lasts for 60 days
+    'USER_ID_FIELD': 'user_id',  # match your CustomUser primary key
+    'USER_ID_CLAIM': 'user_id',
+}
